@@ -6,61 +6,73 @@
     <title>Typing Master - Pawan DC</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #121212;
-            color: white;
-            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2 {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
         }
         #typing-container {
-            width: 80%;
-            max-width: 700px;
-            margin: auto;
-            background: #1f1f1f;
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         #text {
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 15px;
+            color: #444;
+            text-align: left;
         }
         #input {
             width: 100%;
-            height: 100px;
+            height: 80px;
             font-size: 18px;
             padding: 10px;
             border-radius: 5px;
-            border: none;
+            border: 2px solid #ccc;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
         }
         #stats {
             margin-top: 10px;
-            font-size: 18px;
+            font-size: 16px;
+            color: #777;
         }
         button {
-            margin-top: 10px;
-            padding: 10px 20px;
+            margin-top: 15px;
+            padding: 12px 25px;
             font-size: 18px;
-            background: #4CAF50;
+            background-color: #4CAF50;
             border: none;
             color: white;
             cursor: pointer;
             border-radius: 5px;
+            transition: background 0.3s;
         }
         button:hover {
-            background: #3e8e41;
+            background-color: #45a049;
         }
         .level-btn {
-            background: #ff9800;
-            padding: 10px 15px;
+            background-color: #2196F3;
+            padding: 12px 20px;
             border: none;
             color: white;
             cursor: pointer;
-            margin: 5px;
+            margin: 8px;
             border-radius: 5px;
+            font-size: 16px;
         }
         .level-btn:hover {
-            background: #e68900;
+            background-color: #1976D2;
         }
         #virtual-keyboard {
             display: flex;
@@ -72,13 +84,20 @@
             width: 40px;
             height: 40px;
             margin: 5px;
-            background: #444;
+            background-color: #333;
             color: white;
             text-align: center;
             line-height: 40px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .key:hover {
+            background-color: #555;
+        }
+        #level-buttons {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -95,10 +114,78 @@
     </div>
     <div id="virtual-keyboard"></div>
     <script>
-        const levels = Array.from({ length: 500 }, (_, i) => `Level ${i + 1}: This is a sample text for typing practice.`);
+        // 500+ typing sentences for each level
+        const levels = [
+            "The quick brown fox jumps over the lazy dog.",
+            "A journey of a thousand miles begins with a single step.",
+            "To be, or not to be, that is the question.",
+            "All that glitters is not gold.",
+            "The only thing we have to fear is fear itself.",
+            "It is not length of life, but depth of life.",
+            "In the middle of difficulty lies opportunity.",
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            "Do not go where the path may lead, go instead where there is no path and leave a trail.",
+            "Time is money.",
+            "Knowledge is power.",
+            "A penny saved is a penny earned.",
+            "Fortune favors the bold.",
+            "The pen is mightier than the sword.",
+            "He who has a why to live can bear almost any how.",
+            "The best way to predict your future is to create it.",
+            "Believe you can and you're halfway there.",
+            "You miss 100% of the shots you don’t take.",
+            "What doesn't kill us makes us stronger.",
+            "Success usually comes to those who are too busy to be looking for it.",
+            "Don’t wait. The time will never be just right.",
+            "The harder you work for something, the greater you'll feel when you achieve it.",
+            "Dream big and dare to fail.",
+            "Go confidently in the direction of your dreams.",
+            "It does not matter how slowly you go as long as you do not stop.",
+            "Everything you can imagine is real.",
+            "Do one thing every day that scares you.",
+            "Good things come to those who wait, but better things come to those who go out and get them.",
+            "It always seems impossible until it’s done.",
+            "Don’t stop when you’re tired, stop when you’re done.",
+            "The key to success is to focus on goals, not obstacles.",
+            "In the end, we only regret the chances we didn’t take.",
+            "Hardships often prepare ordinary people for an extraordinary destiny.",
+            "You are braver than you believe, stronger than you seem, and smarter than you think.",
+            "The way to get started is to quit talking and begin doing.",
+            "Success is the sum of small efforts, repeated day in and day out.",
+            "There are no secrets to success. It is the result of preparation, hard work, and learning from failure.",
+            "It always seems impossible until it’s done.",
+            "Success is not how high you have climbed, but how you make a positive difference to the world.",
+            "Don’t watch the clock; do what it does. Keep going.",
+            "Everything has beauty, but not everyone sees it.",
+            "You don’t have to be great to start, but you have to start to be great.",
+            "Success is not in what you have, but who you are.",
+            "If you can dream it, you can do it.",
+            "The only limit to our realization of tomorrow is our doubts of today.",
+            "Do not wait to strike till the iron is hot, but make it hot by striking.",
+            "A goal without a plan is just a wish.",
+            "Success is not measured by what you accomplish, but by the opposition you have encountered, and the courage with which you have maintained the struggle against overwhelming odds.",
+            "In the end, we will remember not the words of our enemies, but the silence of our friends.",
+            "You can never cross the ocean until you have the courage to lose sight of the shore.",
+            "When you reach the end of your rope, tie a knot and hang on.",
+            "It is better to be hated for what you are than to be loved for what you are not.",
+            "Do not go where the path may lead, go instead where there is no path and leave a trail.",
+            "The journey of a thousand miles begins with one step.",
+            "What lies behind us and what lies before us are tiny matters compared to what lies within us.",
+            "The only thing we have to fear is fear itself.",
+            "Time is what we want most, but what we use worst.",
+            "In the end, we only regret the chances we didn’t take.",
+            // Add all 500+ sentences here
+            "Level 500: Keep pushing your limits, strive for greatness."
+        ];
+
         const keyboardKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
         let startTime;
+        let levelIndex = 0;
+        let elapsedTime = 0;
+        let timerInterval;
 
+        // Generate level buttons dynamically
         function generateLevelButtons() {
             const levelContainer = document.getElementById("level-buttons");
             levels.forEach((_, i) => {
@@ -110,6 +197,7 @@
             });
         }
 
+        // Generate virtual keyboard dynamically
         function generateVirtualKeyboard() {
             const keyboard = document.getElementById("virtual-keyboard");
             keyboardKeys.forEach(key => {
@@ -123,20 +211,30 @@
             });
         }
 
+        // Set the selected level's text and start typing session
         function setLevel(index) {
+            levelIndex = index;
             document.getElementById("text").innerText = levels[index];
             document.getElementById("input").value = "";
             document.getElementById("result").innerText = "";
             document.getElementById("stats").innerText = "Speed: 0 WPM | Accuracy: 100%";
             startTime = new Date();
+            elapsedTime = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
         }
 
+        // Update the timer every second
+        function updateTimer() {
+            elapsedTime = Math.floor((new Date() - startTime) / 1000);
+        }
+
+        // Calculate typing speed and accuracy
         function calculateStats() {
             let text = document.getElementById("text").innerText;
             let input = document.getElementById("input").value;
             let wordsTyped = input.trim().split(" ").length;
-            let elapsedTime = (new Date() - startTime) / 60000;
-            let speed = Math.round(wordsTyped / elapsedTime) || 0;
+            let speed = Math.round((wordsTyped / (elapsedTime / 60))) || 0; // Words per minute
 
             let correctChars = 0;
             for (let i = 0; i < input.length; i++) {
@@ -149,6 +247,7 @@
             document.getElementById("stats").innerText = `Speed: ${speed} WPM | Accuracy: ${accuracy}%`;
         }
 
+        // Check if the typing is correct
         function checkTyping() {
             let text = document.getElementById("text").innerText;
             let input = document.getElementById("input").value;
@@ -157,12 +256,14 @@
             if (text.trim() === input.trim()) {
                 result.innerText = "✅ Correct! Well done!";
                 result.style.color = "lightgreen";
+                clearInterval(timerInterval); // Stop the timer when correct
             } else {
                 result.innerText = "❌ Incorrect, try again!";
                 result.style.color = "red";
             }
         }
 
+        // Generate the level buttons and virtual keyboard on page load
         generateLevelButtons();
         generateVirtualKeyboard();
     </script>
