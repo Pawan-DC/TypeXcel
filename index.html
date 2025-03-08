@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Master - Pawan DC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: white;
+            padding: 20px;
+        }
+        #typing-container {
+            width: 80%;
+            max-width: 700px;
+            margin: auto;
+            background: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+        }
+        #text {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        #input {
+            width: 100%;
+            height: 100px;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        #stats {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #3e8e41;
+        }
+        .level-btn {
+            background: #ff9800;
+            padding: 10px 15px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .level-btn:hover {
+            background: #e68900;
+        }
+        #virtual-keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .key {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            background: #444;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Typing Master</h1>
+    <h2>Select a Level to Start</h2>
+    <div id="level-buttons"></div>
+    <div id="typing-container">
+        <p id="text">Click on a level to start typing...</p>
+        <textarea id="input" placeholder="Start typing here..." oninput="calculateStats()"></textarea>
+        <p id="stats">Speed: 0 WPM | Accuracy: 100%</p>
+        <button onclick="checkTyping()">Check</button>
+        <p id="result"></p>
+    </div>
+    <div id="virtual-keyboard"></div>
+    <script>
+        const levels = Array.from({ length: 500 }, (_, i) => `Level ${i + 1}: This is a sample text for typing practice.`);
+        const keyboardKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        let startTime;
+
+        function generateLevelButtons() {
+            const levelContainer = document.getElementById("level-buttons");
+            levels.forEach((_, i) => {
+                const btn = document.createElement("button");
+                btn.classList.add("level-btn");
+                btn.innerText = `Level ${i + 1}`;
+                btn.onclick = () => setLevel(i);
+                levelContainer.appendChild(btn);
+            });
+        }
+
+        function generateVirtualKeyboard() {
+            const keyboard = document.getElementById("virtual-keyboard");
+            keyboardKeys.forEach(key => {
+                const keyBtn = document.createElement("div");
+                keyBtn.classList.add("key");
+                keyBtn.innerText = key;
+                keyBtn.onclick = () => {
+                    document.getElementById("input").value += key;
+                };
+                keyboard.appendChild(keyBtn);
+            });
+        }
+
+        function setLevel(index) {
+            document.getElementById("text").innerText = levels[index];
+            document.getElementById("input").value = "";
+            document.getElementById("result").innerText = "";
+            document.getElementById("stats").innerText = "Speed: 0 WPM | Accuracy: 100%";
+            startTime = new Date();
+        }
+
+        function calculateStats() {
+            let text = document.getElementById("text").innerText;
+            let input = document.getElementById("input").value;
+            let wordsTyped = input.trim().split(" ").length;
+            let elapsedTime = (new Date() - startTime) / 60000;
+            let speed = Math.round(wordsTyped / elapsedTime) || 0;
+
+            let correctChars = 0;
+            for (let i = 0; i < input.length; i++) {
+                if (input[i] === text[i]) {
+                    correctChars++;
+                }
+            }
+            let accuracy = ((correctChars / text.length) * 100).toFixed(2);
+
+            document.getElementById("stats").innerText = `Speed: ${speed} WPM | Accuracy: ${accuracy}%`;
+        }
+
+        function checkTyping() {
+            let text = document.getElementById("text").innerText;
+            let input = document.getElementById("input").value;
+            let result = document.getElementById("result");
+
+            if (text.trim() === input.trim()) {
+                result.innerText = "✅ Correct! Well done!";
+                result.style.color = "lightgreen";
+            } else {
+                result.innerText = "❌ Incorrect, try again!";
+                result.style.color = "red";
+            }
+        }
+
+        generateLevelButtons();
+        generateVirtualKeyboard();
+    </script>
+</body>
+</html>
